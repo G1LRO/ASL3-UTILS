@@ -8,38 +8,51 @@ A collection of small utility scripts for [AllStarLink 3 (ASL3)](https://allstar
 
 Clears the `devstr=` value in `simpleusb.conf` and restarts Asterisk.
 
-### Purpose
+### What this is for
 
-When you swap the USB sound device on an ASL3 node (e.g. fitting a new AIOC, CM108-class fob, or other USB sound card), `simpleusb.conf` may still be pointing at the old device's `devstr` identifier. `cleardev.sh` blanks this value so Asterisk falls back to auto-detecting the active USB sound device, rather than continuing to look for the one that's no longer there.
+If you swap the USB sound device on your ASL3 node — for example, fitting a new AIOC, or replacing one USB sound fob with another — Asterisk can get confused. It may still be looking for the old device by its unique ID (`devstr`), even though that device is no longer plugged in.
 
-### What it does
+Running this script clears that stored ID, so Asterisk goes back to automatically detecting whatever USB sound device is currently connected.
 
-1. Backs up `/etc/asterisk/simpleusb.conf` with a timestamp
-2. Clears the `devstr=` value (leaves the key in place, blank)
+### What it actually does, step by step
+
+1. Makes a safety copy of `/etc/asterisk/simpleusb.conf` (just in case)
+2. Clears the old `devstr=` value in that file
 3. Restarts Asterisk so the change takes effect
 
-A backup is created on every run, e.g.:
+You don't need to do any of this manually — the script does all three steps for you.
+
+Each time you run it, a fresh timestamped backup is created, for example:
 
 ```
 /etc/asterisk/simpleusb.conf.bak.20260601_120000
 ```
 
-### Requirements
+### Before you start
 
-- AllStarLink 3 / Asterisk installed
-- Run as root (or with `sudo`)
+- This is for AllStarLink 3 / Asterisk nodes
+- You'll need `sudo` access on your node
 
 ### Usage
 
+**1. Download the script**
+
 ```bash
 wget -O cleardev.sh https://raw.githubusercontent.com/G1LRO/ASL3-UTILS/main/cleardev.sh
+```
+
+**2. Run it**
+
+```bash
 sudo bash cleardev.sh
 ```
 
-### When to run this
+That's it — the script handles the backup, the config edit, and the Asterisk restart for you.
 
-- After physically swapping the USB sound device on your node (e.g. replacing one AIOC with another, or changing to a different USB sound fob)
-- If Asterisk fails to find the expected USB device after a hardware change
+### When should I run this?
+
+- Right after you've physically swapped your USB sound device (e.g. a new AIOC, or a different USB radio interface fob)
+- If Asterisk doesn't seem to notice your new device after a hardware swap
 
 ---
 
