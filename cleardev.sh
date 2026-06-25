@@ -18,7 +18,7 @@ echo "  Backed up to simpleusb.conf.bak.${TIMESTAMP}"
 
 echo ""
 echo "=== Clearing devstr value ==="
-sed -i 's/^devstr=.*/devstr=/' "$FILE"
+sed -i 's/^devstr[[:space:]]*=[[:space:]]*.*/devstr=/' "$FILE"
 echo "Done — devstr= is now blank"
 
 echo ""
